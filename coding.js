@@ -27,7 +27,7 @@ const add = arr => {
     return summingVal;
   });
 
-  return flag === true ? 'game over' : maxVal;
+  return flag === true ? 0 : maxVal;
 };
 
 
@@ -40,59 +40,60 @@ const push = (arr, valArr) => {
 
     arr.push(arr[index - 1] + item);
   });
-  console.log(arr);
-  console.log('----------- push -----------------');
+
   return arr;
 };
 
 const summing = (preArr, nextArr) => {
   let newArr = [];
   let newVal;
-  console.log(preArr, nextArr);
+
   preArr.forEach((item, index) => {
     let curVal = item + nextArr[index];
     newVal = item <= 0 ? 0 : (curVal > 0 ? curVal : 0);
     newArr.push(newVal);
   });
-  console.log(newArr);
-  console.log('------ summing -------');
   return newArr;
 };
 
+const sum = (summingArr, curArr, sumValArr) => {
+  let sumVal;
+  console.log(summingArr, curArr);
+  summingArr.forEach((item, index) => {
+    // if (index === summingArr.length) return;
+    let newArr = [item, ...curArr.slice(index + 1)];
+    sumVal = add(newArr);
+    sumValArr.push(sumVal);
+  });
+
+  return sumValArr;
+};
+
 const solve = map => {
-  let xindex = 0,
-    yindex = 0,
-    xmax = map.length > 0 && map[0].length || 0,
-    ymax = map.length > 0 && map.length || 0,
-    result = [],
+  let result = [],
     maxValArr = [],
     maxVal;
 
   if (map.length === 1) return add(map[0]);
-  map.reduce((prev, cur, ind) => {
+  map.reduce((prev, cur) => {
     let summingArr = [];
-    let curArr = [...cur];
+    let curArr;
     if (result.length === 0) {
       result = push(result, prev);
-      curArr[0] = result[0];
       summingArr = summing(result, cur);
     } else {
-      curArr[0] = prev[0];
       summingArr = summing(prev, cur);
     }
-    let preVal; // [ 0, 2, 5 ]
+    result = sum(summingArr, cur, []);
+    // console.log(result, summingArr);
     summingArr && summingArr.forEach((item, i) => {
-      if (i > 0) {
-        preVal = summingArr[i - 1];
-        let val = item + preVal;
-        console.log(item, summingArr[i - 1]);
-        
-        summingArr[i] = item === 0 ? 0 : (item > val ? item : val);
-      }
+      let val = result[i];
+      console.log(val);
+      item < val && (summingArr[i] = val);
     });
-    maxValArr = summingArr;
+    // maxValArr = summingArr;
     console.log('----------  result -------------');
-    console.log(maxValArr);
+    console.log(summingArr);
     console.log('----------  result -------------');
     return summingArr;
     // if (ymax === index) {
