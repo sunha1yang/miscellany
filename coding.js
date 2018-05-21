@@ -10,20 +10,53 @@
  *   ];
  *   console.log(solve(map)); // => 4
  */
+
 const map = [
-  [-2, 1], // -2, -2, 1
-  [-3, -1], // 4, -3, -1
-  // [1, -1, -5, -3, -1],
-  // [-2, 1, -2, -3, -1],
-  // [-3, -1, 4, 1, -1],
+  [2, 1, -2],
+  [-3, -1, 4],
+  [1, -1, -5],
 ];
 
 const add = arr => {
   if (arr.length === 1) return arr[0];
+  let flag = false;
+  let summingVal;
   const maxVal = arr.reduce((prevResult, item) => {
-    return prevResult += item;
+    summingVal = prevResult + item;
+    if (summingVal <= 0 ) flag = true;
+    return summingVal;
   });
-  return maxVal;
+
+  return flag === true ? 'game over' : maxVal;
+};
+
+
+const push = (arr, valArr) => {
+  valArr && valArr.forEach((item, index) => {
+    if (index === 0) {
+      arr.push(item);
+      return true;
+    }
+
+    arr.push(arr[index - 1] + item);
+  });
+  console.log(arr);
+  console.log('----------- push -----------------');
+  return arr;
+};
+
+const summing = (preArr, nextArr) => {
+  let newArr = [];
+  let newVal;
+  console.log(preArr, nextArr);
+  preArr.forEach((item, index) => {
+    let curVal = item + nextArr[index];
+    newVal = item <= 0 ? 0 : (curVal > 0 ? curVal : 0);
+    newArr.push(newVal);
+  });
+  console.log(newArr);
+  console.log('------ summing -------');
+  return newArr;
 };
 
 const solve = map => {
@@ -33,33 +66,45 @@ const solve = map => {
     ymax = map.length > 0 && map.length || 0,
     result = [],
     maxValArr = [],
-    startVal,
     maxVal;
-    
-  console.log(map, add(map[0]));
-  if (map.length === 1) return add(map[0]);
-  map.reduce((prev, cur, index) => {
-    let result = [];
-    if (index === 1) {
-      startVal = cur[0];
-      result.push(startVal);
-    }
 
-    let len = index - 1;
-    for (let i = 0; i < len; index++) {
-      result.push(cur[i] + 1);
+  if (map.length === 1) return add(map[0]);
+  map.reduce((prev, cur, ind) => {
+    let summingArr = [];
+    let curArr = [...cur];
+    if (result.length === 0) {
+      result = push(result, prev);
+      curArr[0] = result[0];
+      summingArr = summing(result, cur);
+    } else {
+      curArr[0] = prev[0];
+      summingArr = summing(prev, cur);
     }
-    if (ymax === index) {
-      result.forEach((item,ind) => {
-        if (ind === result.length) return;
-        let newArr = [item, ...cur.slice(ind)];
-        maxVal = add(newArr);
-        maxValArr.push(maxVal);
-      });
-    }
-    console.log(prev);
-    return prev;
+    let preVal; // [ 0, 2, 5 ]
+    summingArr && summingArr.forEach((item, i) => {
+      if (i > 0) {
+        preVal = summingArr[i - 1];
+        let val = item + preVal;
+        console.log(item, summingArr[i - 1]);
+        
+        summingArr[i] = item === 0 ? 0 : (item > val ? item : val);
+      }
+    });
+    maxValArr = summingArr;
+    console.log('----------  result -------------');
+    console.log(maxValArr);
+    console.log('----------  result -------------');
+    return summingArr;
+    // if (ymax === index) {
+    //   result.forEach((item,ind) => {
+    //     if (ind === result.length) return;
+    //     let newArr = [item, ...cur.slice(ind)];
+    //     maxVal = add(newArr);
+    //     maxValArr.push(maxVal);
+    //   });
+    // }
   });
 };
-console.log(solve(map));
+
+solve(map);
 module.exports = solve;
