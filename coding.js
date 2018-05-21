@@ -19,15 +19,13 @@ const map = [
 
 const add = arr => {
   if (arr.length === 1) return arr[0];
-  let flag = false;
   let summingVal;
   const maxVal = arr.reduce((prevResult, item) => {
     summingVal = prevResult + item;
-    if (summingVal <= 0 ) flag = true;
     return summingVal;
   });
 
-  return flag === true ? 0 : maxVal;
+  return maxVal;
 };
 
 
@@ -46,12 +44,10 @@ const push = (arr, valArr) => {
 
 const summing = (preArr, nextArr) => {
   let newArr = [];
-  let newVal;
 
   preArr.forEach((item, index) => {
     let curVal = item + nextArr[index];
-    newVal = item <= 0 ? 0 : (curVal > 0 ? curVal : 0);
-    newArr.push(newVal);
+    newArr.push(curVal);
   });
   return newArr;
 };
@@ -61,7 +57,10 @@ const sum = (summingArr, curArr, sumValArr) => {
   console.log(summingArr, curArr);
   summingArr.forEach((item, index) => {
     // if (index === summingArr.length) return;
-    let newArr = [item, ...curArr.slice(index + 1)];
+    let newArr = [item, ...curArr.slice(0, index)];
+    console.log('----------  sumValArr -------------');
+    console.log(newArr);
+    console.log('----------  sumValArr -------------');
     sumVal = add(newArr);
     sumValArr.push(sumVal);
   });
@@ -81,6 +80,9 @@ const solve = map => {
     if (result.length === 0) {
       result = push(result, prev);
       summingArr = summing(result, cur);
+      console.log('----------  summingArr -------------');
+      console.log(result, summingArr);
+      console.log('----------  summingArr -------------');
     } else {
       summingArr = summing(prev, cur);
     }
