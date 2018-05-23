@@ -6,7 +6,7 @@ class Event {
     this._maxListeners = 10;
   }
 
-  setMaxListeners() {
+  setMaxListeners(maxListeners) {
     this._maxListeners = maxListeners;
   }
 
