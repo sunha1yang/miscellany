@@ -11,103 +11,74 @@
  *   console.log(solve(map)); // => 4
  */
 
-const map = [
-  [2, 1, -2],
-  [-3, -1, 4],
-  [1, -1, -5],
-];
+function solve(map) {
+  if (map === null) return 0;
 
-const add = arr => {
-  if (arr.length === 1) return arr[0];
-  let summingVal;
-  const maxVal = arr.reduce((prevResult, item) => {
-    summingVal = prevResult + item;
-    return summingVal;
-  });
+  const h = map.length;
+  if (h === 0) return 0;
+  const w = map[0].length;
+  if (w === 0) return 0;
 
-  return maxVal;
-};
+  // 动态规划
+  const dp = new Array(h);
+  for (let i = 0; i < h; ++i) {
+    dp[i] = new Array(w).fill(0);
+  }
 
+  dp[h - 1][w - 1] = map[h - 1][w - 1] > 0 ? 0 : -map[h - 1][w - 1];
 
-const push = (arr, valArr) => {
-  valArr && valArr.forEach((item, index) => {
-    if (index === 0) {
-      arr.push(item);
-      return true;
+  // 初始化尾行
+  for (let i = w - 2; i >= 0; --i) {
+    dp[h - 1][i] = Math.max(dp[h - 1][i + 1] - map[h - 1][i], 0);
+  }
+
+  // 初始化尾列
+  for (let i = h - 2; i >= 0; --i) {
+    dp[i][w - 1] = Math.max(dp[i + 1][w - 1] - map[i][w - 1], 0);
+  }
+
+  for (let i = h - 2; i >= 0; --i) {
+    for (let j = w - 2; j >= 0; --j) {
+      dp[i][j] = Math.max(Math.min(dp[i][j + 1], dp[i + 1][j]) - map[i][j], 0);
+    }
+  }
+
+  return dp[0][0] + 1;
+}
+
+function calc(path) {
+  return path.reduce((acc, cur) => Math.max(acc - cur, 0), 0) + 1;
+}
+
+function solve2(map) {
+  const h = map.length;
+  if (h === 0) return 0;
+  const w = map[0].length;
+  if (w === 0) return 0;
+
+  let min = Number.MAX_SAFE_INTEGER;
+
+  function dfs(x, y, path) {
+    if (x === 0 && y === 0) {
+      return min = Math.min(min, calc(path.slice()));
     }
 
-    arr.push(arr[index - 1] + item);
-  });
-
-  return arr;
-};
-
-const summing = (preArr, nextArr) => {
-  let newArr = [];
-
-  preArr.forEach((item, index) => {
-    let curVal = item + nextArr[index];
-    newArr.push(curVal);
-  });
-  return newArr;
-};
-
-const sum = (summingArr, curArr, sumValArr) => {
-  let sumVal;
-  console.log(summingArr, curArr);
-  summingArr.forEach((item, index) => {
-    // if (index === summingArr.length) return;
-    let newArr = [item, ...curArr.slice(0, index)];
-    console.log('----------  sumValArr -------------');
-    console.log(newArr);
-    console.log('----------  sumValArr -------------');
-    sumVal = add(newArr);
-    sumValArr.push(sumVal);
-  });
-
-  return sumValArr;
-};
-
-const solve = map => {
-  let result = [],
-    maxValArr = [],
-    maxVal;
-
-  if (map.length === 1) return add(map[0]);
-  map.reduce((prev, cur) => {
-    let summingArr = [];
-    let curArr;
-    if (result.length === 0) {
-      result = push(result, prev);
-      summingArr = summing(result, cur);
-      console.log('----------  summingArr -------------');
-      console.log(result, summingArr);
-      console.log('----------  summingArr -------------');
-    } else {
-      summingArr = summing(prev, cur);
+    if (x - 1 >= 0) {
+      path.push(map[x - 1][y]);
+      dfs(x - 1, y, path);
+      path.pop();
     }
-    result = sum(summingArr, cur, []);
-    // console.log(result, summingArr);
-    summingArr && summingArr.forEach((item, i) => {
-      let val = result[i];
-      console.log(val);
-      item < val && (summingArr[i] = val);
-    });
-    // maxValArr = summingArr;
-    console.log('----------  result -------------');
-    console.log(summingArr);
-    console.log('----------  result -------------');
-    return summingArr;
-    // if (ymax === index) {
-    //   result.forEach((item,ind) => {
-    //     if (ind === result.length) return;
-    //     let newArr = [item, ...cur.slice(ind)];
-    //     maxVal = add(newArr);
-    //     maxValArr.push(maxVal);
-    //   });
-    // }
-  });
-};
 
-solve(map);
-module.exports = solve;
+    if (y - 1 >= 0) {
+      path.push(map[x][y - 1]);
+      dfs(x, y - 1, path);
+      path.pop();
+    }
+  }
+
+  dfs(h - 1, w - 1, [map[h - 1][w - 1]]);
+
+  return min;
+}
+
+module.exports = { solve, solve2 };
