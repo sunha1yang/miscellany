@@ -60,6 +60,10 @@ const gen = (times, cb) => {
 
 class Promise {
   constructor(executor) {
+
+    // executor不是函数直接抛出异常
+    if (typeof executor !== 'function') throw new TypeError('Promise executor is not a function');
+
     // 给Promise实例同步当前状态
     this.status = PENDING;
     // 初始化存放成功的回调的数组
@@ -72,10 +76,10 @@ class Promise {
       if (value != null && value.then && typeof value.then === 'function') {
         return value.then(resolve, reject);
       }
-      // 为什么要把它用setTimeout包起来
-      setTimeout(() => {
+
+      process && process.nextTick(() => {
         // 如果是初始态，则转成成功态
-        if (this.status == PENDING) {
+        if (this.status === PENDING) {
           this.status = FULFILLED;
           // 同步成功的data给value
           this.value = value;
@@ -86,7 +90,7 @@ class Promise {
     };
 
     const reject = (reason) => {
-      setTimeout(() => {
+      process && process.nextTick(() => {
         // 如果是初始态，则转成失败态
         if (this.status == PENDING) {
           this.status = REJECTED;
@@ -118,7 +122,7 @@ class Promise {
     // FULFILLED处理逻辑
     if (this.status == FULFILLED) {
       return promise2 = new Promise((resolve, reject) => {
-        setTimeout(() => {
+        process && process.nextTick(() => {
           try {
             let x = onFulfilled(this.value);
             resolvePromise(promise2, x, resolve, reject);
@@ -132,7 +136,7 @@ class Promise {
     // REJECTED处理逻辑
     if (this.status == REJECTED) {
       return promise2 = new Promise((resolve, reject) => {
-        setTimeout(() => {
+        process && process.nextTick(() => {
           try {
             let x = onRejected(this.value);
             resolvePromise(promise2, x, resolve, reject);
