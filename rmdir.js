@@ -1,5 +1,5 @@
 /**
- * 需求：异步删除非空目录
+ * 异步删除非空目录
  */
 let fs = require('fs');
 let path = require('path');

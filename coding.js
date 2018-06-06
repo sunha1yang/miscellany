@@ -59,9 +59,7 @@ function solve2(map) {
   let min = Number.MAX_SAFE_INTEGER;
 
   function dfs(x, y, path) {
-    if (x === 0 && y === 0) {
-      return min = Math.min(min, calc(path.slice()));
-    }
+    if (x === 0 && y === 0) return min = Math.min(min, calc(path.slice()));
 
     if (x - 1 >= 0) {
       path.push(map[x - 1][y]);
