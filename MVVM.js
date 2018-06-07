@@ -42,9 +42,9 @@ function Compile(el, vm) {
   replace(fragment);
 
   function replace(fragment) {
+    let reg = /\{\{(.*)\}\}/;
     Array.from(fragment.childNodes).forEach((node) => { // 循环每一层
       let text = node.textContent;
-      let reg = /\{\{(.*)\}\}/;
       if (node.nodeType === 3 && reg.test(text)) {
         let arr = RegExp.$1.split('.');
         let val = vm;
@@ -130,15 +130,14 @@ Dep.prototype.notify = function () {
   });
 };
 
-// watcher
-function Watcher(vm, exp, fn) { // Watch是一个类 通过这个类创建的实例都有update方法
+function Watcher(vm, exp, fn) {
   this.fn = fn;
   this.vm = vm;
-  this.exp = exp; // 添加到订阅中
+  this.exp = exp;
   Dep.target = this;
   let val = vm;
   let arr = exp.split('.');
-  arr.forEach((k) => { // 取this.a.a 触发get()
+  arr.forEach((k) => {
     val = val[k];
   });
   Dep.target = null;
@@ -147,10 +146,10 @@ function Watcher(vm, exp, fn) { // Watch是一个类 通过这个类创建的实
 Watcher.prototype.update = function () {
   let val = this.vm;
   let arr = this.exp.split('.');
-  arr.forEach((k) => { // 取this.a.a 触发get()
+  arr.forEach((k) => {
     val = val[k];
   });
-  this.fn(val); // newVal
+  this.fn(val);
 };
 
 
