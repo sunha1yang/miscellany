@@ -75,9 +75,7 @@ function Compile(el, vm) {
           });
         });
       }
-      if (node.childNodes) {
-        replace(node);
-      }
+      if (node.childNodes) replace(node);
     });
   }
 
@@ -113,8 +111,6 @@ function observe(data) {
   if (typeof data !== 'object') return;
   return new Observe(data);
 }
-// vue 特点：不能新增不存在的属性，因为没有 get 和 set
-// 深度响应，每次赋予一个新对象时会给这个新对象增加数据劫持
 
 // 发布订阅模式
 function Dep() {
