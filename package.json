@@ -4,6 +4,7 @@
   "description": "常用Javascript tools",
   "main": ".eslintrc.js",
   "scripts": {
+    "precommit": "lint-staged",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -27,6 +28,9 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/sunha1yang/miscellany/issues"
+  },
+  "lint-staged": {
+    "*.js": "eslint"
   },
   "homepage": "https://github.com/sunha1yang/miscellany#readme"
 }
