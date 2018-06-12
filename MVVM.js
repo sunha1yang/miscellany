@@ -42,9 +42,9 @@ function Compile(el, vm) {
   replace(fragment);
 
   function replace(fragment) {
+    let reg = /\{\{(.*)\}\}/;
     Array.from(fragment.childNodes).forEach((node) => { // 循环每一层
       let text = node.textContent;
-      let reg = /\{\{(.*)\}\}/;
       if (node.nodeType === 3 && reg.test(text)) {
         let arr = RegExp.$1.split('.');
         let val = vm;
@@ -75,9 +75,7 @@ function Compile(el, vm) {
           });
         });
       }
-      if (node.childNodes) {
-        replace(node);
-      }
+      if (node.childNodes) replace(node);
     });
   }
 
@@ -113,8 +111,6 @@ function observe(data) {
   if (typeof data !== 'object') return;
   return new Observe(data);
 }
-// vue 特点：不能新增不存在的属性，因为没有 get 和 set
-// 深度响应，每次赋予一个新对象时会给这个新对象增加数据劫持
 
 // 发布订阅模式
 function Dep() {
@@ -130,15 +126,14 @@ Dep.prototype.notify = function () {
   });
 };
 
-// watcher
-function Watcher(vm, exp, fn) { // Watch是一个类 通过这个类创建的实例都有update方法
+function Watcher(vm, exp, fn) {
   this.fn = fn;
   this.vm = vm;
-  this.exp = exp; // 添加到订阅中
+  this.exp = exp;
   Dep.target = this;
   let val = vm;
   let arr = exp.split('.');
-  arr.forEach((k) => { // 取this.a.a 触发get()
+  arr.forEach((k) => {
     val = val[k];
   });
   Dep.target = null;
@@ -147,10 +142,10 @@ function Watcher(vm, exp, fn) { // Watch是一个类 通过这个类创建的实
 Watcher.prototype.update = function () {
   let val = this.vm;
   let arr = this.exp.split('.');
-  arr.forEach((k) => { // 取this.a.a 触发get()
+  arr.forEach((k) => {
     val = val[k];
   });
-  this.fn(val); // newVal
+  this.fn(val);
 };
 
 
