@@ -5,7 +5,8 @@
   "main": ".eslintrc.js",
   "scripts": {
     "precommit": "lint-staged",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --fix packages/**/*.js packages/**/bin/*"
   },
   "repository": {
     "type": "git",
