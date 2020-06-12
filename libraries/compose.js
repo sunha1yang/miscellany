@@ -8,9 +8,6 @@
  * @api public
  */
 
-// 思路整理：
-// 为什么遇到 next 就会停止？？ 因为在调用的时候，将下一个要调用的中间件函数当做 next 参数传递给了当前调用的中间件
-// 为什么使用 i与index 做判断？？ 防止出现多次 next 调用的情况。
 function compose(middleware) {
   if (!Array.isArray(middleware)) throw new TypeError('Middleware stack must be an array!')
   for (const fn of middleware) {
@@ -38,5 +35,10 @@ function compose(middleware) {
         return Promise.reject(err);
       }
     }
-  }
+  };
 }
+
+// 思路整理：
+// 为什么遇到 next 就会停止？？ 因为在调用的时候，将下一个要调用的中间件函数当做 next 参数传递给了当前调用的中间件
+// 为什么使用 i与index 做判断？？ 防止出现多次 next 调用的情况。如果next 没有被拦截会怎么样？？会多次进行调用 绑定的函数（next后面的）
+// 

@@ -22,18 +22,16 @@ Function.prototype.mybind = function (thisArg) {
   if (this.prototype) {
     nop.prototype = this.prototype;
   }
+
   // 修改绑定函数的原型指向
   bound.prototype = new nop();
 
   return bound;
 };
 
-
-Function.prototype.myBind2 = function (_this, arg) {
-  return () => {
-    this.apply(
-      _this,
-      arg
-    );
-  };
-};
+// 思路详解：
+// 1. 调用bind的方法必须是function
+// 2. 参数的处理：第一个参数必须是 this的指向，其余参数随意
+// 3. this的保存：在使用的过程中应该注意this的指向问题，提前保存，防止被篡改
+// 4. 返回值肯定是一个函数，然后内部被apply 更改this指向（且存在两种情况：1. 构造函数 --> 指向实例。 2. 正常的this指向）
+// 5. 箭头函数没有

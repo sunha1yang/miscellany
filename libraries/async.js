@@ -20,3 +20,6 @@ function spawn(genF) {
     step(function () { return gen.next(undefined); });
   });
 }
+
+// async 实现思路
+// 
