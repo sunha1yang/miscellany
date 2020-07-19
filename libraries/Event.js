@@ -65,3 +65,14 @@ class Event {
 }
 
 module.exports = Event;
+
+
+const deepClone = (obj) => {
+  if (obj && typeof obj !== 'object') return obj;
+  let _obj = Array.isArray(obj) ? [] : {};
+  for (let o in obj) {
+    _obj[o] = typeof obj !== 'object' ? obj[0] : deepClone(obj[o]);
+  };
+
+  return _obj;
+}

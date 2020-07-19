@@ -1,6 +1,5 @@
 Function.prototype.mybind = function (thisArg) {
   if (typeof this !== 'function') throw TypeError('Bind must be called on a function');
-
   // 拿到参数，为了传给调用者
   const args = Array.prototype.slice.call(arguments, 1),
     // 保存 this
@@ -17,21 +16,25 @@ Function.prototype.mybind = function (thisArg) {
         args.concat(Array.prototype.slice.call(arguments))
       );
     };
-
   // 箭头函数没有 prototype，箭头函数this永远指向它所在的作用域
   if (this.prototype) {
     nop.prototype = this.prototype;
   }
-
   // 修改绑定函数的原型指向
   bound.prototype = new nop();
 
   return bound;
 };
-
-// 思路详解：
-// 1. 调用bind的方法必须是function
-// 2. 参数的处理：第一个参数必须是 this的指向，其余参数随意
-// 3. this的保存：在使用的过程中应该注意this的指向问题，提前保存，防止被篡改
-// 4. 返回值肯定是一个函数，然后内部被apply 更改this指向（且存在两种情况：1. 构造函数 --> 指向实例。 2. 正常的this指向）
-// 5. 箭头函数没有
+function bubbleSort(arr) {
+  var len = arr.length;
+  for (var i = 0; i < len - 1; i++) {
+    for (var j = 0; j < len - 1 - i; j++) {
+      if (arr[j] > arr[j + 1]) {        // 相邻元素两两对比   
+        var temp = arr[j + 1];        // 元素交换   
+        arr[j + 1] = arr[j];
+        arr[j] = temp;
+      }
+    }
+  }
+  return arr;
+}
