@@ -1,10 +1,12 @@
-var deepCopy = function (obj) {
-  if (typeof obj !== 'object') return;
-  var newObj = obj instanceof Array ? [] : {};
-  for (var key in obj) {
+// js实现深度复制
+
+const deepClone = (obj) => {
+  if (!obj || typeof obj !== 'object') return obj;
+  let newObj = Array.isArray(obj) ? [] : {};
+  for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
-      newObj[key] = typeof obj[key] === 'object' ? deepCopy(obj[key]) : obj[key];
+      newObj[key] = (obj && typeof obj[key] === 'object') ? deepClone(obj[key]) : obj[key];
     }
   }
   return newObj;
-}
+};

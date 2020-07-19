@@ -34,5 +34,24 @@ function myNew() {
   return typeof ret === 'object' && ret !== null ? ret : obj;
 }
 
+
+
+// function* gen(n) {
+//   let a = n;
+//   console.log(a);
+//   let b = yield 1;
+//   console.log(b);
+//   let c = yield 2;
+//   console.log(c);
+//   return 'result';
+// };
+
+// let g = gen(8);
+
+// console.log(g.next(9));
+// console.log(g.next(10));
+// console.log(g.next(11));
+// console.log(g.next(12));
+// console.log(g.next(13));
 // async 实现思路
 // 
