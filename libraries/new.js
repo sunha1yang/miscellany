@@ -10,3 +10,9 @@ function myNew() {
   // 如果构造函数返回值是对象则返回这个对象，如果不是对象则返回新的实例对象
   return typeof ret === 'object' && ret !== null ? ret : obj;
 }
+
+
+// 实现方式：
+// 创建一个对象
+// 修改原型指向
+// 函数执行 返回对象
