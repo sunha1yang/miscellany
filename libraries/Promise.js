@@ -47,17 +47,6 @@ const resolvePromise = (promise2, x, resolve, reject) => {
   }
 };
 
-const gen = (times, cb) => {
-  let result = [],
-    count = 0;
-  return function (i, data) {
-    result[i] = data;
-    if (++count == times) {
-      cb(result);
-    }
-  };
-};
-
 class Promise {
   constructor(executor) {
 
@@ -174,9 +163,20 @@ class Promise {
     this.then(null, onRejected);
   }
 
+  static gen (times, cb) {
+    let result = [],
+      count = 0;
+    return function (i, data) {
+      result[i] = data;
+      if (++count == times) {
+        cb(result);
+      }
+    };
+  }
+
   static all (promises) {
     return new Promise((resolve, reject) => {
-      let done = gen(promises.length, resolve);
+      let done = this.gen(promises.length, resolve);
       for (let i = 0; i < promises.length; i++) {
         promises[i].then(function (data) {
           done(i, data);
@@ -205,6 +205,8 @@ class Promise {
     });
   }
 }
+
+
 
 
 

@@ -25,6 +25,14 @@ Function.prototype.mybind = function (thisArg) {
 
   return bound;
 };
+
+// 实现思路
+// 创建一个函数，返回一个函数
+// 特殊处理的地方就是需要确定是否是构造函数的情况
+
+
+
+
 function bubbleSort(arr) {
   var len = arr.length;
   for (var i = 0; i < len - 1; i++) {

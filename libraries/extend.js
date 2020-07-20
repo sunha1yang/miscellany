@@ -15,18 +15,56 @@ function __extends(child, parent) {
       : ((__.prototype = parent.prototype), new __());
 }
 
-var B = (function () {
-  function B(opt) {
-    this.name = opt.name;
-  }
-  return B;
-})();
+function B(opt) {
+  this.name = opt.name;
+}
 
-var A = (function (_super) {
-  __extends(A, _super);
-  function A() {
-    // 借用继承，可以实现向父类传参, 使用 super 可以向父类传参
-    return (_super !== null && _super.apply(this, { name: 'B' })) || this;
+function A() {}
+
+Object.setPrototypeOf(A, B);
+
+// __extends(A, B);
+const _a = new A({ name: '22222' });
+console.log(_a);
+
+
+class Polygon {
+  constructor(height, width) {
+    this.name = 'Rectangle';
+    this.test = 'test';
+    this.height = height;
+    this.width = width;
   }
-  return A;
-})(B);
+  sayName() {
+    console.log('Hi, I am a ', this.name + '.');
+  }
+  get area() {
+    return this.height * this.width;
+  }
+  set area(value) {
+    this._area = value;
+  }
+
+  static fn () {
+    console.log(2222);
+  }
+}
+
+class Square extends Polygon {
+  constructor(length) {
+    // this.height; // ReferenceError，super 需要先被调用！
+
+    // 这里，它调用父类的构造函数的, 
+    // 作为Polygon 的 height, width
+    super(length, length);
+
+    // 注意: 在派生的类中, 在你可以使用'this'之前, 必须先调用super()。
+    // 忽略这, 这将导致引用错误。
+    this.name = 'Square';
+  }
+}
+
+// __extends(Square, Polygon);
+
+const _s = new Square(1111);
+console.log(_s.name, _s.test, _s.height, _s.width, Square.fn);

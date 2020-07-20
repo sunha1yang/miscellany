@@ -30,4 +30,4 @@ const maxSubArray = function (nums) {
 // 如果 sum > 0，则说明 sum 对结果有增益效果，则 sum 保留并加上当前遍历数字
 // 如果 sum <= 0，则说明 sum 对结果无增益效果，需要舍弃，则 sum 直接更新为当前遍历数字
 // 每次比较 sum 和 ans的大小，将最大值置为ans，遍历结束返回结果
-// 时间复杂度：O(n)O(n)
+// 时间复杂度：O(n)
