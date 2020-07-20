@@ -1,0 +1,19 @@
+!   <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+
+    //requestIdleCallback
+    //把一个任务交给浏览器,然后告诉 浏览器当你不忙的时候帮我执行
+    requestIdleCallback(function(){
+        console.log(Date.now());
+    });
+    //1秒60帧 1帧 16.67ms 浏览器把自己的事情都干完了,
+</script>
+</body>
+</html>
